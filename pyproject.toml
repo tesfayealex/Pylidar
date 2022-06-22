@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "Pylidar"
+version = "0.0.1"
+authors = [
+  { name="Tesfaye Alemayehu", email="tesfayealemayehu27@gmail.com" },
+]
+description = "A package to simply fetch lidar data and give functionality to process the data"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/tesfayealex/Pylidar"
+"Bug Tracker" = "https://github.com/tesfayealex/Pylidar/issues"
