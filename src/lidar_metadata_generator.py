@@ -4,9 +4,10 @@ import requests
 import pandas as pd
 
 class Generate_metadata():
-    def __init__(self , filename_path , output_filepath , url):
+    def __init__(self , filename_path , output_filepath , url , number_of_filename = None):
         self.filename_path = filename_path
         self.output_filepath = output_filepath
+        self.number_of_filename = number_of_filename
         self.url = url
     def get_filenames(self):
         with open(self.filename_path, "r") as f:
@@ -38,11 +39,12 @@ class Generate_metadata():
         self.get_filenames()
         metadata = pd.DataFrame(columns=['filename', 'region',
                       'year', 'xmin', 'xmax', 'ymin', 'ymax' , 'zmin' , 'zmax', 'points' , 'version'])
-        count = 0
-        for file in self.filenames:
-                count+=1
-                print(count)
-                if True:
+        if self.number_of_filename == None:
+                max = len(self.filenames)
+        else:
+                max = self.number_of_filename
+                
+        for file in self.filenames[0:max]:
                         try:
                                 result = requests.get(self.url + file + "ept.json")
                                 result.raise_for_status()
