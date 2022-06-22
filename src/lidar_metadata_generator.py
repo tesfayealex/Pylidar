@@ -33,3 +33,22 @@ class Generate_metadata():
                      }
         
         return json_data
+    
+    def generate_metadata(self):
+        self.get_filenames()
+        metadata = pd.DataFrame(columns=['filename', 'region',
+                      'year', 'xmin', 'xmax', 'ymin', 'ymax' , 'zmin' , 'zmax', 'points' , 'version'])
+        count = 0
+        for file in self.filenames:
+                count+=1
+                print(count)
+                if True:
+                        try:
+                                result = requests.get(self.url + file + "ept.json")
+                                result.raise_for_status()
+                                result = result.json()
+                                data = self.create_metadata_json(file,result)
+                                metadata = metadata.append(data,ignore_index=True)
+                        except requests.exceptions.HTTPError as err:
+                                pass
+        metadata.to_csv(self.output_filepath, mode='a')
