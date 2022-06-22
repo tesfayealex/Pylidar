@@ -41,7 +41,7 @@ Link For data set - https://registry.opendata.aws/usgs-lidar/
 
 ## Installation Guide
 
-    For the time being cloning is the only option (will be updated once the package is ready) 
+For the time being cloning is the only option (will be updated once the package is ready) 
         ```bash
             git clone https://github.com/tesfayealex/Pylidar
             cd Pylidar
@@ -49,13 +49,22 @@ Link For data set - https://registry.opendata.aws/usgs-lidar/
         ```
   
 ## Project Structure
-    The Project uses a recomended python package project structure which includes
+The Project uses a recomended python package project structure which includes
 
 ### src 
-    This folder holds the lidar metadata generator , processor , data transformer modules and assets
+This folder holds the lidar metadata generator , processor , data transformer modules and assets
+- `lidar_data_processor.py`: a python script for processing lidar data
+- `lidar_metadata_generator.py`: a python script for generating metadata from the lidar data source
+- `transformation_utility.py`: a python script for lidar data transformation
 ### assets
-    This folder holds the metadata generated , pipeline template and filenames of data source
+This folder holds the metadata generated , pipeline template and filenames of data source
+- `datasource_filenames.txt`: text file with data source file names
+- `metadata.csv`: csv data of the lidar metadata 
+- `pipeline_template.json`: pdal pipeline template file
 ### docs 
-    This folder holds package documentation
+This folder holds package documentation
 ### tests
-    This folder holds unit test files
+This folder holds unit test files
+- `test_lidar_data_processor.py`: unit test file for lidar data processing python script
+- `test_transformation_utility.csv`: unit test file for lidar data transformation python script
+
