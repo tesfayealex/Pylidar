@@ -8,15 +8,38 @@ import geopandas as gpd
 
 class Lidar_Processor():
 
-    def __init__(self , pipeline_template_path , metadata_path , polygon , epsg):
+    def __init__(self , polygon_array, pipeline_template_path , metadata_path , epsg):
+        MINX, MINY, MAXX, MAXY = polygon_array
+        polygon = Polygon(((MINX, MINY), (MINX, MAXY), (MAXX, MAXY), (MAXX, MINY), (MINX, MINY)))
+
         self.pipeline_template_path = pipeline_template_path
         self.metadata_path = metadata_path
         self.polygon = polygon
         self.pipeline={}
         self.epsg = epsg
         self.default_epsg = "3857"
-
+    
     def pipline_modifier(self):
+        with open(self.pipeline_template_path, 'r') as json_file:
+            pipeline = json.load(json_file)
+        bound , region_data, polygon_str = self.get_region_from_boundary()
+        print(bound)
+        print(region_data)
+        print(polygon_str)
+        if polygon_str != "":
+                self.pipeline = pipeline
+                self.pipeline['pipeline'][0]['filename'] = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"+ region_data['region'] + "/ept.json"
+                self.pipeline['pipeline'][0]['bounds'] = "(" + str([bound[0],bound[1]]) + "," + str([bound[2],bound[3]]) + ")"
+                # self.pipeline['pipeline'][1]['polygon'] = polygon_str
+                self.pipeline['pipeline'][3]['out_srs'] = f'EPSG:{self.epsg}'
+                self.pipeline['pipeline'][6]['filename'] = 'Pylidar/src/assets/data/'+ str(region_data['region'] + ".laz")
+                self.pipeline['pipeline'][7]['filename'] = 'Pylidar/src/assets/data/'+ str(region_data['region'] + ".tif")
+                print(self.pipeline['pipeline'])
+                
+        else:
+                return "No Region was found on metadata"
+
+    def pipline_executer(self):
         self.pipline_modifier()
         print(type(self.pipeline['pipeline']))
         pipeline = pdal.Pipeline(json.dumps(self.pipeline))
@@ -45,7 +68,6 @@ class Lidar_Processor():
         x_cord, y_cord = polygon_df['geometry'][0].exterior.coords.xy
         polygon_str = f"({x_cord},{y_cord})"
         metadata = pd.read_csv(self.metadata_path)
-        # print(metadata.shape)
         for index in range(len(metadata)):
                 row = metadata.iloc[index]  
                 if row['xmin'] <= xmin and row['xmax'] >= xmax and row['ymin'] <= ymin and row['ymax'] >= ymax:
@@ -58,3 +80,10 @@ class Lidar_Processor():
         self.geo_df = self.get_geo_dep(pipeline_array)
         print(self.geo_df)
         return self.geo_df
+
+if __name__ == "__main__":
+        polygon_array = [-93.756155, 41.918015, -93.747334, 41.921429]
+        processor = Lidar_Processor( polygon_array,'Pylidar/src/assets/pipeline_template.json', 'Pylidar/src/assets/metadata.csv', epsg="4326")
+        pipeline_array = processor.pipline_executer()
+        geo_df = processor.get_geo_dep(pipeline_array)
+        print(geo_df)
