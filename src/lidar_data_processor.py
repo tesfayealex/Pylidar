@@ -16,7 +16,24 @@ class Lidar_Processor():
         self.epsg = epsg
         self.default_epsg = "3857"
     def pipline_modifier(self):
-        pass
+        self.pipline_modifier()
+        print(type(self.pipeline['pipeline']))
+        pipeline = pdal.Pipeline(json.dumps(self.pipeline))
+        pipeline.execute()
+        pipeline_array = pipeline.arrays[0]
+        return pipeline_array
+
+    def get_geo_df(self, array_data: np.ndarray) -> gpd.GeoDataFrame:
+ 
+        geometry_points = [Point(x, y) for x, y in zip(array_data["X"], array_data["Y"])]
+        elevations = array_data["Z"]
+
+        geo_df = gpd.GeoDataFrame(columns=["elevation", "geometry"])
+        geo_df['elevation'] = elevations
+        geo_df['geometry'] = geometry_points
+        geo_df = geo_df.set_geometry("geometry")
+        geo_df.set_crs(epsg=self.epsg, inplace=True)
+        return geo_df
 
     def get_region_from_boundary(self):
         polygon_df = gpd.GeoDataFrame([self.polygon], columns=['geometry'])
