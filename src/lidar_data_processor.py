@@ -15,6 +15,7 @@ class Lidar_Processor():
         self.pipeline={}
         self.epsg = epsg
         self.default_epsg = "3857"
+
     def pipline_modifier(self):
         self.pipline_modifier()
         print(type(self.pipeline['pipeline']))
@@ -40,31 +41,20 @@ class Lidar_Processor():
         polygon_df.set_crs(epsg=self.epsg, inplace=True)
         polygon_df['geometry'] = polygon_df['geometry'].to_crs(epsg=self.default_epsg)
         xmin, ymin, xmax, ymax = polygon_df['geometry'][0].bounds
-        # bound = Bounds(xmin, xmax, ymin, ymax)
         bound_tuple = (xmin, xmax, ymin, ymax)
         x_cord, y_cord = polygon_df['geometry'][0].exterior.coords.xy
         polygon_str = f"({x_cord},{y_cord})"
         metadata = pd.read_csv(self.metadata_path)
-        print(metadata.shape)
-        # for index, data in enumerate(metadata):
-        #         print(index)
-        
-        # print(metadata.head())
+        # print(metadata.shape)
         for index in range(len(metadata)):
                 row = metadata.iloc[index]  
-                # print(index) 
-                # if row['xmin'] <= xmin:
-                #         print(True)
                 if row['xmin'] <= xmin and row['xmax'] >= xmax and row['ymin'] <= ymin and row['ymax'] >= ymax:
                         region_data = row
                         return bound_tuple , region_data , polygon_str
         return () , {} , ""
 
     def fetch_file(self):
-        with open('assets/pipeline_template.json', 'r') as json_file:
-            json_obj = json.load(json_file)
-
-        print(json_obj)
-        pipeline = pdal.Pipeline(json.dumps(json_obj)).execute()
-
-        # self.data_count = self.pipeline.execute()
+        pipeline_array = self.pipline_executer()
+        self.geo_df = self.get_geo_dep(pipeline_array)
+        print(self.geo_df)
+        return self.geo_df
