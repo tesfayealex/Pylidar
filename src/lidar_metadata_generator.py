@@ -43,7 +43,7 @@ class Generate_metadata():
                 max = len(self.filenames)
         else:
                 max = self.number_of_filename
-                
+
         for file in self.filenames[0:max]:
                         try:
                                 result = requests.get(self.url + file + "ept.json")
@@ -53,4 +53,8 @@ class Generate_metadata():
                                 metadata = metadata.append(data,ignore_index=True)
                         except requests.exceptions.HTTPError as err:
                                 pass
-        metadata.to_csv(self.output_filepath, mode='a')
+        metadata.to_csv(self.output_filepath)
+
+if __name__ == "__main__":
+        meta = Generate_metadata('assets/datasource_filenames.txt' , 'assets/metadata.csv', 'https://s3-us-west-2.amazonaws.com/usgs-lidar-public/')
+        meta.generate_metadata()
