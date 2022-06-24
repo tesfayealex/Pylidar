@@ -24,6 +24,9 @@ class Lidar_Visualizer():
         plt.figure(figsize=(10, 6))
         plt.imshow(self.source.read(1), cmap='pink')
         plt.show()
+    def plot_geopandas(self):
+        plt.figure(figsize=(10, 6))
+        rio.plot.show(self.source)
     def plot_image_with_affine_transform(self):
         rio.plot.show((self.source, 1), transform=self.source.transform, cmap='viridis')
     def plot_image_with_contour(self):
