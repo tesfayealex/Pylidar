@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import pdal
@@ -8,7 +9,7 @@ import geopandas as gpd
 
 class Lidar_Processor():
 
-    def __init__(self , polygon_array, pipeline_template_path , metadata_path , epsg):
+    def __init__(self , polygon_array, pipeline_template_path , metadata_path , epsg ,default_epsg: int = 3857):
         MINX, MINY, MAXX, MAXY = polygon_array
         polygon = Polygon(((MINX, MINY), (MINX, MAXY), (MAXX, MAXY), (MAXX, MINY), (MINX, MINY)))
 
@@ -17,31 +18,26 @@ class Lidar_Processor():
         self.polygon = polygon
         self.pipeline={}
         self.epsg = epsg
-        self.default_epsg = "3857"
+        self.default_epsg = default_epsg
     
     def pipline_modifier(self):
         with open(self.pipeline_template_path, 'r') as json_file:
             pipeline = json.load(json_file)
         bound , region_data, polygon_str = self.get_region_from_boundary()
-        print(bound)
-        print(region_data)
-        print(polygon_str)
         if polygon_str != "":
                 self.pipeline = pipeline
                 self.pipeline['pipeline'][0]['filename'] = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"+ region_data['region'] + "/ept.json"
                 self.pipeline['pipeline'][0]['bounds'] = "(" + str([bound[0],bound[1]]) + "," + str([bound[2],bound[3]]) + ")"
                 # self.pipeline['pipeline'][1]['polygon'] = polygon_str
                 self.pipeline['pipeline'][3]['out_srs'] = f'EPSG:{self.epsg}'
-                self.pipeline['pipeline'][6]['filename'] = 'Pylidar/src/assets/data/'+ str(region_data['region'] + ".laz")
-                self.pipeline['pipeline'][7]['filename'] = 'Pylidar/src/assets/data/'+ str(region_data['region'] + ".tif")
-                print(self.pipeline['pipeline'])
+                self.pipeline['pipeline'][6]['filename'] = '../src/assets/data/'+ str(region_data['region'] + ".laz")
+                self.pipeline['pipeline'][7]['filename'] = '../src/assets/data/'+ str(region_data['region'] + ".tif")
                 
         else:
                 return "No Region was found on metadata"
 
     def pipline_executer(self):
         self.pipline_modifier()
-        print(type(self.pipeline['pipeline']))
         pipeline = pdal.Pipeline(json.dumps(self.pipeline))
         pipeline.execute()
         pipeline_array = pipeline.arrays[0]
@@ -77,13 +73,12 @@ class Lidar_Processor():
 
     def fetch_file(self):
         pipeline_array = self.pipline_executer()
-        self.geo_df = self.get_geo_dep(pipeline_array)
-        print(self.geo_df)
-        return self.geo_df
+        self.geo_df = self.get_geo_df(pipeline_array)
+        tiff_path = os.path.abspath(self.pipeline['pipeline'][7]['filename'])
+        return self.geo_df , tiff_path
 
 if __name__ == "__main__":
-        polygon_array = [-93.756155, 41.918015, -93.747334, 41.921429]
-        processor = Lidar_Processor( polygon_array,'Pylidar/src/assets/pipeline_template.json', 'Pylidar/src/assets/metadata.csv', epsg="4326")
+        polygon_array = [446112.3120340019  , 4652575.060161518 , 447610.6998241764,4654067.900678839]
+        processor = Lidar_Processor( polygon_array,'Pylidar/src/assets/pipeline_template.json', 'Pylidar/src/assets/metadata.csv', epsg=26915)
         pipeline_array = processor.pipline_executer()
-        geo_df = processor.get_geo_dep(pipeline_array)
-        print(geo_df)
+        geo_df = processor.get_geo_df(pipeline_array)
