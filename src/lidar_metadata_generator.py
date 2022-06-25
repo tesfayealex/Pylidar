@@ -5,15 +5,41 @@ import pandas as pd
 
 class Generate_metadata():
     def __init__(self , filename_path , output_filepath , url , number_of_filename = None):
+        """ Initialize metadata generator class with filepaths and number of files
+
+        Args:
+            filepath_path (String): path of filename list
+            output_filepath (String): path of the metadata csv file to be found 
+            url (STring): url of point cloud data location
+        Returns:
+        None
+        """
         self.filename_path = filename_path
         self.output_filepath = output_filepath
         self.number_of_filename = number_of_filename
         self.url = url
     def get_filenames(self):
+        """ Filename reader function 
+
+        Args:
+        None 
+
+        Returns:
+        None
+        """
         with open(self.filename_path, "r") as f:
             data = f.read().splitlines()
         self.filenames = data
     def create_metadata_json(self,filename , data):
+        """ create metadata json from data object
+
+        Args:
+            filename (String): filename of the region
+            data (JSON): full detail data of region 
+
+        Returns:
+            JSON: Json data of metadata row
+        """
         filename = filename.replace('/','')
         filenames = filename.split('_')
         region = '_'.join(filenames[0:len(filenames)-1])
@@ -36,6 +62,14 @@ class Generate_metadata():
         return json_data
     
     def generate_metadata(self):
+        """ Main function which facilitate metadata generation
+
+        Args:
+        None
+
+        Returns:
+        None
+        """
         self.get_filenames()
         metadata = pd.DataFrame(columns=['filename', 'region',
                       'year', 'xmin', 'xmax', 'ymin', 'ymax' , 'zmin' , 'zmax', 'points' , 'version'])
