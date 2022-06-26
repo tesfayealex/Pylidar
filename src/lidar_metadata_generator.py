@@ -4,7 +4,7 @@ import requests
 import pandas as pd
 
 class Generate_metadata():
-    def __init__(self , filename_path , output_filepath , url , number_of_filename = None):
+    def __init__(self , filename_path: str="" , output_filepath: str= "" , url: str="" , number_of_filename: int= 0):
         """ Initialize metadata generator class with filepaths and number of files
 
         Args:
@@ -30,7 +30,7 @@ class Generate_metadata():
         with open(self.filename_path, "r") as f:
             data = f.read().splitlines()
         self.filenames = data
-    def create_metadata_json(self,filename , data):
+    def create_metadata_json(self,filename: str= "" , data: json= {}):
         """ create metadata json from data object
 
         Args:
@@ -73,7 +73,7 @@ class Generate_metadata():
         self.get_filenames()
         metadata = pd.DataFrame(columns=['filename', 'region',
                       'year', 'xmin', 'xmax', 'ymin', 'ymax' , 'zmin' , 'zmax', 'points' , 'version'])
-        if self.number_of_filename == None:
+        if self.number_of_filename is None:
                 max = len(self.filenames)
         else:
                 max = self.number_of_filename

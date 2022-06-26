@@ -9,7 +9,7 @@ import geopandas as gpd
 
 class Lidar_Processor():
 
-    def __init__(self , region = '', polygon_array =[], epsg = 3857 ,default_epsg: int = 3857):
+    def __init__(self , region: str='', polygon_array: list = [], epsg: int = 3857 ,default_epsg: int = 3857):
         """ Initializes the class with region , polygon array and EPSG Amount
 
         Args:
@@ -21,8 +21,10 @@ class Lidar_Processor():
         Returns:
         None
         """
-        MINX, MINY, MAXX, MAXY = polygon_array
-        polygon = Polygon(((MINX, MINY), (MINX, MAXY), (MAXX, MAXY), (MAXX, MINY), (MINX, MINY)))
+        polygon = Polygon()
+        if polygon_array != []:
+            MINX, MINY, MAXX, MAXY = polygon_array
+            polygon = Polygon(((MINX, MINY), (MINX, MAXY), (MAXX, MAXY), (MAXX, MINY), (MINX, MINY)))
 
         self.polygon = polygon
         self.pipeline={}
@@ -30,7 +32,7 @@ class Lidar_Processor():
         self.default_epsg = default_epsg
         self.region = region
         self.pipeline_template_path = '../src/assets/pipeline_template.json'
-        self.metadata_path = "'../src/assets/metadata.csv'"
+        self.metadata_path = "../src/assets/metadata.csv"
     
     def pipline_modifier(self):
         """ Modifies the PDAL pipeline template to the required region PDAL template
@@ -43,8 +45,17 @@ class Lidar_Processor():
         """
         with open(self.pipeline_template_path, 'r') as json_file:
             pipeline = json.load(json_file)
-        bound , region_data = self.get_region_from_boundary()
-        if len(region_data) == 0:
+        bound = ()
+        region_data = {}
+        if self.region != "":
+                bound, region_data = self.get_region_from_name()
+                if len(region_data) == 0:
+                    bound , region_data
+        
+        if self.region == '' or len(region_data) == 0:
+            bound , region_data = self.get_region_from_boundary()
+
+        if len(region_data) != 0:
                 self.pipeline = pipeline
                 self.pipeline['pipeline'][0]['filename'] = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"+ region_data['region'] + "/ept.json"
                 self.pipeline['pipeline'][0]['bounds'] = "(" + str([bound[0],bound[1]]) + "," + str([bound[2],bound[3]]) + ")"
@@ -68,8 +79,8 @@ class Lidar_Processor():
         self.pipline_modifier()
         pipeline = pdal.Pipeline(json.dumps(self.pipeline))
         pipeline.execute()
-        pipeline_array = pipeline.arrays[0]
-        return pipeline_array
+        self.pipeline_array = pipeline.arrays[0]
+        return self.pipeline_array
 
     def get_geo_df(self, array_data: np.ndarray) -> gpd.GeoDataFrame:
         """ Creates Dataframe from the PDAL pipeline array 
@@ -88,6 +99,23 @@ class Lidar_Processor():
         geo_df = geo_df.set_geometry("geometry")
         geo_df.set_crs(epsg=self.epsg, inplace=True)
         return geo_df
+
+    def get_region_from_name(self):
+        """ Identifies the required region from the region name 
+        Args:
+        None
+
+        Returns:
+            Tuple: Tuple of bounds of the identified region
+            JSON: json of the full region data from the metadata
+        """
+        metadata = pd.read_csv(self.metadata_path)
+        for index in range(len(metadata)):
+                row = metadata.iloc[index]  
+                if row['fileanme'] == self.region:
+                    bound_tuple = (row['xmin'],row['xmax'],row['ymin'],row['ymax'])
+                    return bound_tuple , region_data
+        return (),{}
 
     def get_region_from_boundary(self):
         """ Identifies the required region from the polygon boundary 
@@ -122,11 +150,12 @@ class Lidar_Processor():
         Returns:
             Dataframe: Geopandas data frame for the identified region
             String: Path of the downloaded tiff file
+            list: Pipeline array of the found region
         """
         pipeline_array = self.pipline_executer()
         self.geo_df = self.get_geo_df(pipeline_array)
         tiff_path = os.path.abspath(self.pipeline['pipeline'][7]['filename'])
-        return self.geo_df , tiff_path
+        return self.geo_df , tiff_path , pipeline_array
 
 if __name__ == "__main__":
         polygon_array = [446112.3120340019  , 4652575.060161518 , 447610.6998241764,4654067.900678839]

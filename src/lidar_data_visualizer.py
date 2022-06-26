@@ -1,5 +1,5 @@
 from asyncore import file_dispatcher
-from glob import glob
+import geopandas as gpd
 import matplotlib.pyplot as plt
 import rasterio as rio
 from rasterio.plot import plotting_extent , show_hist
@@ -7,7 +7,7 @@ from rasterio.plot import plotting_extent , show_hist
 
 class Lidar_Visualizer():
 
-    def __init__(self , geo_dataframe = None , filepath = None ):
+    def __init__(self , geo_dataframe: gpd.GeoDataFrame= None , filepath: str = None ):
         """ Initializes visualizer class with geodataframe and tiff filepath
 
         Args:
@@ -22,21 +22,23 @@ class Lidar_Visualizer():
         if filepath is not None:
             self.filepath = filepath
             self.source = rio.open(self.filepath)
-    def plot_3d_terrain (self, df=None):
+    
+    def plot_3d_terrain (self, df: gpd.GeoDataFrame=None):
         """ Draws 3d terrain plot of the geodataframe
 
         Args:
             df (Dataframe): geodataframe of the point cloud data
-            
+
         Returns:
         None
         """
-        if df == None:
+        if df is None:
             df = self.geo_dataframe
         fig, ax = plt.subplots(1, 1, figsize=(12, 10))
         ax = plt.axes(projection='3d')
         ax.scatter(df.geometry.x, df.geometry.y, df.elevation, s=0.01)
         plt.show()
+    
     def plot_2d_image(self):
         """ Draws 2d image of the raster 
 
@@ -49,6 +51,7 @@ class Lidar_Visualizer():
         plt.figure(figsize=(10, 6))
         plt.imshow(self.source.read(1), cmap='pink')
         plt.show()
+    
     def plot_geopandas(self):
         """ Draws the raster
 
@@ -60,6 +63,7 @@ class Lidar_Visualizer():
         """
         plt.figure(figsize=(10, 6))
         rio.plot.show(self.source)
+    
     def plot_image_with_affine_transform(self):
         """ Draws the raster with affine transform 
 
@@ -70,6 +74,7 @@ class Lidar_Visualizer():
         None
         """
         rio.plot.show((self.source, 1), transform=self.source.transform, cmap='viridis')
+    
     def plot_image_with_contour(self):
         """  Draws the Geodataframe with contour 
 
@@ -81,6 +86,7 @@ class Lidar_Visualizer():
         """
         fig, ax = plt.subplots(1, figsize=(12, 12))
         rio.plot.show((self.source, 1), ax=ax, contour=True, contour_label_kws={})
+    
     def plot_histogram_of_raster(self):
         """ Draws the histogram of the tiff raster
 
@@ -93,6 +99,7 @@ class Lidar_Visualizer():
         plt.figure(figsize=(12, 8))
         show_hist(self.source, bins=50, lw=0.0, stacked=False, alpha=0.3,
         histtype='stepfilled', title="Histogram of a raster")
+
     def plot_grey_rbg_with_histogram(self):
         """ Draws the gray RGB of raster with histogram
 

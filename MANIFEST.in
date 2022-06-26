@@ -1,0 +1,2 @@
+global-exclude docs/*
+global-exclude src/assets/data/*

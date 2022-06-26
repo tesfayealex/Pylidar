@@ -163,7 +163,7 @@
 <span id="lidar-data-processor-module"></span><h1>lidar_data_processor module<a class="headerlink" href="#module-lidar_data_processor" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="lidar_data_processor.Lidar_Processor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lidar_data_processor.</span></span><span class="sig-name descname"><span class="pre">Lidar_Processor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygon_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3857</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_epsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3857</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lidar_data_processor.Lidar_Processor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lidar_data_processor.</span></span><span class="sig-name descname"><span class="pre">Lidar_Processor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygon_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3857</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_epsg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3857</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lidar_data_processor.Lidar_Processor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="lidar_data_processor.Lidar_Processor.fetch_file">
@@ -173,7 +173,8 @@
 None</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>Dataframe: Geopandas data frame for the identified region
-String: Path of the downloaded tiff file</p>
+String: Path of the downloaded tiff file
+list: Pipeline array of the found region</p>
 </dd>
 </dl>
 </dd></dl>
@@ -194,6 +195,19 @@ String: Path of the downloaded tiff file</p>
 <dt class="sig sig-object py" id="lidar_data_processor.Lidar_Processor.get_region_from_boundary">
 <span class="sig-name descname"><span class="pre">get_region_from_boundary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lidar_data_processor.Lidar_Processor.get_region_from_boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Identifies the required region from the polygon boundary 
+Args:
+None</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Tuple: Tuple of bounds of the identified region
+JSON: json of the full region data from the metadata</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lidar_data_processor.Lidar_Processor.get_region_from_name">
+<span class="sig-name descname"><span class="pre">get_region_from_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lidar_data_processor.Lidar_Processor.get_region_from_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies the required region from the region name 
 Args:
 None</p>
 <dl class="simple">

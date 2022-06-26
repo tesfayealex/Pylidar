@@ -68,3 +68,11 @@ This folder holds unit test files
 - `test_lidar_data_processor.py`: unit test file for lidar data processing python script
 - `test_transformation_utility.csv`: unit test file for lidar data transformation python script
 
+## Install from TestPyPi repository
+    - `pip install -i https://test.pypi.org/simple/ pylidar`
+
+## Used Reference and Reused Codes From
+    - https://towardsdatascience.com/how-to-automate-lidar-point-cloud-processing-with-python-a027454a536c
+
+
+

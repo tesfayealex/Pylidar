@@ -1,0 +1,45 @@
+src package
+===========
+
+Submodules
+----------
+
+src.lidar\_data\_processor module
+---------------------------------
+
+.. automodule:: src.lidar_data_processor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.lidar\_data\_visualizer module
+----------------------------------
+
+.. automodule:: src.lidar_data_visualizer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.lidar\_metadata\_generator module
+-------------------------------------
+
+.. automodule:: src.lidar_metadata_generator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.transformation\_utility module
+----------------------------------
+
+.. automodule:: src.transformation_utility
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: src
+   :members:
+   :undoc-members:
+   :show-inheritance:

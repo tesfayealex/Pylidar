@@ -162,29 +162,29 @@
 <span id="transformation-utility-module"></span><h1>transformation_utility module<a class="headerlink" href="#module-transformation_utility" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="transformation_utility.Lidar_Transformation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">transformation_utility.</span></span><span class="sig-name descname"><span class="pre">Lidar_Transformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformation_utility.Lidar_Transformation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">transformation_utility.</span></span><span class="sig-name descname"><span class="pre">Lidar_Transformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformation_utility.Lidar_Transformation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="transformation_utility.Lidar_Transformation.decimation">
-<span class="sig-name descname"><span class="pre">decimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#transformation_utility.Lidar_Transformation.decimation" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">decimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">160</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformation_utility.Lidar_Transformation.decimation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sampling with decimation function</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>points (Dataframe): GeoDataframe of the point cloud data</p>
 </dd>
-<dt>Returns:</dt><dd><p>Dataframe: Decimated Dataframe</p>
+<dt>Returns:</dt><dd><p>list: Decimated points list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="transformation_utility.Lidar_Transformation.grid_subsampling">
-<span class="sig-name descname"><span class="pre">grid_subsampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformation_utility.Lidar_Transformation.grid_subsampling" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">grid_subsampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transformation_utility.Lidar_Transformation.grid_subsampling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grid subampling of the geodataframe using barycenter grid</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>points (Dataframe): GeoDataframe of the point cloud data
 voxel_size (Int): voxel size for sub sampling</p>
 </dd>
-<dt>Returns:</dt><dd><p>list: List of geopandas data frame for all regions enclosing the boundary</p>
+<dt>Returns:</dt><dd><p>list: List of point clouds</p>
 </dd>
 </dl>
 </dd></dl>
