@@ -4,9 +4,3 @@ requests==2.27.1
 setuptools==61.2.0
 laspy==2.1.2
 laszip==0.1.0
-pdal @ file:///home/conda/feedstock_root/build_artifacts/python-pdal_1653308999022/work
-Sphinx @ file:///home/conda/feedstock_root/build_artifacts/sphinx_1655452194084/work
-sphinx-rtd-theme @ file:///Users/ktietz/demo/mc3/conda-bld/sphinx_rtd_theme_1629455006846/work
-rasterio @ file:///home/conda/feedstock_root/build_artifacts/rasterio_1655500902011/work
-matplotlib @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-suite_1651609462317/work
-geopandas @ file:///home/conda/feedstock_root/build_artifacts/geopandas_1655828570365/work
